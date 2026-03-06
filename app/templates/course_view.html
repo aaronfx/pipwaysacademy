@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ course.title }} - Trading Academy Pro</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .course-header {
+            background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+            color: white;
+            padding: 60px 0;
+        }
+        
+        .course-meta {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .curriculum-item {
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+        
+        .curriculum-header {
+            background: #f9fafb;
+            padding: 15px 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .lesson-item {
+            padding: 12px 20px 12px 50px;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .lesson-item:hover {
+            background: #f9fafb;
+        }
+        
+        .enrollment-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            padding: 30px;
+            position: sticky;
+            top: 100px;
+        }
+        
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .feature-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        
+        .feature-list li i {
+            color: #10b981;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('index') }}">
+                <i class="fas fa-chart-line me-2"></i>Trading Academy Pro
+            </a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('courses.index') }}">Courses</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('blog.index') }}">Blog</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('webinars.index') }}">Webinars</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Course Header -->
+    <section class="course-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="mb-3">
+                        <span class="badge bg-success me-2">{{ course.level|title }}</span>
+                        <span class="badge bg-light text-dark">{{ course.category }}</span>
+                    </div>
+                    <h1 class="display-5 fw-bold mb-3">{{ course.title }}</h1>
+                    <p class="lead mb-4">{{ course.description }}</p>
+                    
+                    <div class="course-meta d-flex gap-4">
+                        <div>
+                            <i class="fas fa-book me-2"></i>
+                            <strong>{{ course.get_modules_count() }}</strong> Modules
+                        </div>
+                        <div>
+                            <i class="fas fa-play-circle me-2"></i>
+                            <strong>{{ course.get_lessons_count() }}</strong> Lessons
+                        </div>
+                        <div>
+                            <i class="fas fa-clock me-2"></i>
+                            <strong>{{ course.duration_hours or 'N/A' }}</strong> Hours
+                        </div>
+                        <div>
+                            <i class="fas fa-users me-2"></i>
+                            <strong>{{ course.get_enrolled_students_count() }}</strong> Students
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container py-5">
+        <div class="row">
+            <!-- Main Content -->
+            <div class="col-lg-8">
+                <!-- What You'll Learn -->
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body p-4">
+                        <h4 class="mb-3">What You'll Learn</h4>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <ul class="list-unstyled">
+                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Technical Analysis Mastery</li>
+                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Risk Management Strategies</li>
+                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Trading Psychology</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <ul class="list-unstyled">
+                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Entry & Exit Strategies</li>
+                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Market Structure Analysis</li>
+                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Portfolio Management</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Curriculum -->
+                <h4 class="mb-3">Course Curriculum</h4>
+                {% for module in course.modules %}
+                <div class="curriculum-item">
+                    <div class="curriculum-header" data-bs-toggle="collapse" data-bs-target="#module{{ module.id }}">
+                        <div>
+                            <strong>Module {{ loop.index }}: {{ module.title }}</strong>
+                            <div class="text-muted small">{{ module.lessons|length }} lessons</div>
+                        </div>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="collapse show" id="module{{ module.id }}">
+                        {% for lesson in module.lessons %}
+                        <div class="lesson-item">
+                            <div>
+                                <i class="fas fa-play-circle text-muted me-2"></i>
+                                {{ lesson.title }}
+                                {% if lesson.is_free_preview %}
+                                <span class="badge bg-success ms-2">Free Preview</span>
+                                {% endif %}
+                            </div>
+                            <span class="text-muted small">
+                                {% if lesson.duration_minutes %}
+                                    {{ lesson.duration_minutes }} min
+                                {% endif %}
+                            </span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <div class="enrollment-card">
+                    {% if course.featured_image %}
+                    <img src="{{ url_for('static', filename=course.featured_image) }}" class="img-fluid rounded-3 mb-3" alt="{{ course.title }}">
+                    {% endif %}
+                    
+                    <div class="text-center mb-4">
+                        {% if course.price == 0 %}
+                            <h2 class="text-success">Free</h2>
+                        {% else %}
+                            <h2 class="text-success">${{ "%.2f"|format(course.price) }}</h2>
+                        {% endif %}
+                    </div>
+                    
+                    {% if enrollment %}
+                        <a href="{{ url_for('courses.learn', slug=course.slug) }}" class="btn btn-success w-100 btn-lg mb-3">
+                            <i class="fas fa-play me-2"></i>Continue Learning
+                        </a>
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle me-2"></i>You're enrolled!
+                        </div>
+                    {% else %}
+                        <form method="POST" action="{{ url_for('courses.enroll', slug=course.slug) }}">
+                            <button type="submit" class="btn btn-success w-100 btn-lg mb-3">
+                                {% if course.price == 0 %}
+                                    <i class="fas fa-user-plus me-2"></i>Enroll Now - Free
+                                {% else %}
+                                    <i class="fas fa-shopping-cart me-2"></i>Enroll Now
+                                {% endif %}
+                            </button>
+                        </form>
+                    {% endif %}
+                    
+                    <ul class="feature-list mt-4">
+                        <li><i class="fas fa-infinity"></i>Lifetime Access</li>
+                        <li><i class="fas fa-mobile-alt"></i>Access on Mobile & TV</li>
+                        <li><i class="fas fa-certificate"></i>Certificate of Completion</li>
+                        <li><i class="fas fa-download"></i>Downloadable Resources</li>
+                        <li><i class="fas fa-question-circle"></i>Q&A Support</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
