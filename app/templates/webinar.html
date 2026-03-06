@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webinars - Trading Academy Pro</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .webinars-hero {
+            background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+            color: white;
+            padding: 80px 0;
+        }
+        
+        .webinar-card {
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            height: 100%;
+        }
+        
+        .webinar-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+        
+        .webinar-date {
+            background: linear-gradient(135deg, #7c3aed, #a855f7);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            min-width: 80px;
+        }
+        
+        .webinar-date .day {
+            font-size: 2rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+        
+        .webinar-date .month {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+        
+        .status-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+        }
+        
+        .countdown-box {
+            background: rgba(124, 58, 237, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .countdown-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #7c3aed;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('index') }}">
+                <i class="fas fa-chart-line me-2"></i>Trading Academy Pro
+            </a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('courses.index') }}">Courses</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('blog.index') }}">Blog</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="{{ url_for('webinars.index') }}">Webinars</a></li>
+                    {% if current_user.is_authenticated %}
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('dashboard.index') }}">Dashboard</a></li>
+                    {% else %}
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('auth.login') }}">Login</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="webinars-hero">
+        <div class="container text-center">
+            <h1 class="display-4 fw-bold mb-3">Live Trading Webinars</h1>
+            <p class="lead">Learn from expert traders in real-time sessions</p>
+        </div>
+    </section>
+
+    <div class="container py-5">
+        <!-- Tabs -->
+        <ul class="nav nav-pills justify-content-center mb-5">
+            <li class="nav-item">
+                <a class="nav-link {{ 'active' if current_status == 'upcoming' else '' }}" href="{{ url_for('webinars.index', status='upcoming') }}">Upcoming</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ 'active' if current_status == 'past' else '' }}" href="{{ url_for('webinars.index', status='past') }}">Past Recordings</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ 'active' if current_status == 'all' else '' }}" href="{{ url_for('webinars.index', status='all') }}">All</a>
+            </li>
+        </ul>
+
+        <div class="row g-4">
+            {% for webinar in webinars.items %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card webinar-card">
+                    <div class="d-flex">
+                        <div class="webinar-date d-flex flex-column justify-content-center">
+                            <div class="day">{{ webinar.start_time.strftime('%d') }}</div>
+                            <div class="month">{{ webinar.start_time.strftime('%b') }}</div>
+                        </div>
+                        <div class="flex-grow-1 p-3">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    {% if webinar.status == 'live' %}
+                                    <span class="badge bg-danger status-badge"><i class="fas fa-circle me-1"></i>LIVE</span>
+                                    {% elif webinar.is_featured %}
+                                    <span class="badge bg-warning text-dark status-badge">Featured</span>
+                                    {% endif %}
+                                    <h5 class="mb-1">{{ webinar.title }}</h5>
+                                    <p class="text-muted small mb-2">{{ webinar.short_description or webinar.description[:80] + '...' }}</p>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex align-items-center text-muted small mb-2">
+                                <i class="far fa-clock me-2"></i>
+                                {{ webinar.start_time.strftime('%H:%M') }} {{ webinar.timezone }}
+                            </div>
+                            
+                            {% if webinar.presenter_name %}
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 30px; height: 30px; font-size: 0.8rem;">
+                                    {{ webinar.presenter_name[0] }}
+                                </div>
+                                <small>{{ webinar.presenter_name }}</small>
+                            </div>
+                            {% endif %}
+                            
+                            {% if webinar.id in registered_ids %}
+                                <button class="btn btn-success btn-sm w-100" disabled>
+                                    <i class="fas fa-check me-1"></i>Registered
+                                </button>
+                            {% elif webinar.is_full() %}
+                                <button class="btn btn-secondary btn-sm w-100" disabled>
+                                    <i class="fas fa-ban me-1"></i>Full
+                                </button>
+                            {% else %}
+                                <form method="POST" action="{{ url_for('webinars.register', id=webinar.id) }}">
+                                    <button type="submit" class="btn btn-primary btn-sm w-100">
+                                        <i class="fas fa-calendar-plus me-1"></i>Register Now
+                                    </button>
+                                </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="col-12 text-center py-5">
+                <i class="fas fa-video fa-3x text-muted mb-3"></i>
+                <p class="text-muted">No webinars available</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if webinars.pages > 1 %}
+        <nav class="mt-5">
+            <ul class="pagination justify-content-center">
+                {% for page_num in webinars.iter_pages() %}
+                    {% if page_num %}
+                        <li class="page-item {{ 'active' if page_num == webinars.page else '' }}">
+                            <a class="page-link" href="{{ url_for('webinars.index', page=page_num, status=current_status) }}">{{ page_num }}</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled"><span class="page-link">...</span></li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </nav>
+        {% endif %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
