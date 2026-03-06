@@ -4,6 +4,11 @@ from app.models.course_model import Course, CourseEnrollment
 
 dashboard = Blueprint("dashboard", __name__)
 
+@dashboard.route("/")
+def home():
+    return render_template("index.html")
+
+
 @dashboard.route("/dashboard")
 @login_required
 def dashboard_home():
