@@ -7,4 +7,5 @@ courses = Blueprint("courses", __name__, url_prefix="/courses")
 @courses.route("/")
 @login_required
 def course_list():
+
     return render_template("courses.html")
