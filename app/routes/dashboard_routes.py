@@ -8,4 +8,4 @@ dashboard = Blueprint("dashboard", __name__)
 @login_required
 def home():
 
-    return render_template("dashboard.html")
+    return render_template("index.html")
