@@ -1,19 +1,13 @@
 from flask import Blueprint, render_template
-from app.models.blog_model import BlogPost
+from flask_login import login_required
+from ..models.blog_model import Post
 
 blog = Blueprint("blog", __name__)
 
 @blog.route("/blog")
-def blog_list():
+@login_required
+def blog_page():
 
-    posts = BlogPost.query.order_by(BlogPost.created_at.desc()).all()
+    posts = Post.query.all()
 
     return render_template("blog.html", posts=posts)
-
-
-@blog.route("/blog/<slug>")
-def blog_post(slug):
-
-    post = BlogPost.query.filter_by(slug=slug).first_or_404()
-
-    return render_template("blog_post.html", post=post)
