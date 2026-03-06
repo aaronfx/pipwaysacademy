@@ -1,4 +1,3 @@
-
 from flask import Flask
 from .extensions import db, login_manager, bcrypt
 from .config import Config
