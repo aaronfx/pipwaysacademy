@@ -1,2 +1,1 @@
-# pipwaysacademy
-AI Forex Trader Development Platform
+Clean Trading Academy SaaS structure ready for GitHub and Render deployment.

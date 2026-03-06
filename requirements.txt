@@ -1,0 +1,14 @@
+
+Flask
+Flask-SQLAlchemy
+Flask-Login
+Flask-Bcrypt
+requests
+pandas
+python-docx
+PyPDF2
+python-slugify
+opencv-python
+pillow
+gunicorn
+python-dotenv
