@@ -1,11 +1,13 @@
 from flask import Blueprint, render_template
-from app.models.course_model import Course
+from flask_login import login_required
+from ..models.course_model import Course
 
-courses = Blueprint("courses", __name__)
+course = Blueprint("course", __name__)
 
-@courses.route("/courses")
-def course_list():
+@course.route("/courses")
+@login_required
+def courses():
 
-    all_courses = Course.query.all()
+    courses = Course.query.all()
 
-    return render_template("courses.html", courses=all_courses)
+    return render_template("courses.html", courses=courses)
