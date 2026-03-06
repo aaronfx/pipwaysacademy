@@ -1,27 +1,29 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html>
+<head>
+<title>Login</title>
+</head>
 
-{% block title %}Login{% endblock %}
+<body>
 
-{% block content %}
-
-<div class="max-w-md mx-auto mt-24 bg-slate-900 p-8 rounded-xl">
-
-<h2 class="text-2xl font-bold mb-6">Login</h2>
+<h2>Login</h2>
 
 <form method="POST">
 
-<input name="email" placeholder="Email"
-class="w-full mb-4 p-3 bg-slate-800 rounded">
+<label>Email</label><br>
+<input type="email" name="email"><br><br>
 
-<input type="password" name="password" placeholder="Password"
-class="w-full mb-4 p-3 bg-slate-800 rounded">
+<label>Password</label><br>
+<input type="password" name="password"><br><br>
 
-<button class="w-full bg-blue-500 py-3 rounded">
-Login
-</button>
+<button type="submit">Login</button>
 
 </form>
 
-</div>
+<p>
+Don't have an account?
+<a href="/register">Register</a>
+</p>
 
-{% endblock %}
+</body>
+</html>
