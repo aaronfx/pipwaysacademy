@@ -1,33 +1,8 @@
-{% extends "base.html" %}
+<h2>Dashboard</h2>
 
-{% block content %}
-
-<h1 class="text-3xl font-bold mb-6">
-Dashboard
-</h1>
-
-<div class="grid grid-cols-4 gap-6">
-
-<div class="bg-slate-900 p-6 rounded-xl">
-<h3 class="text-slate-400 text-sm">Win Rate</h3>
-<p class="text-2xl font-bold">62%</p>
-</div>
-
-<div class="bg-slate-900 p-6 rounded-xl">
-<h3 class="text-slate-400 text-sm">Total Trades</h3>
-<p class="text-2xl font-bold">120</p>
-</div>
-
-<div class="bg-slate-900 p-6 rounded-xl">
-<h3 class="text-slate-400 text-sm">Profit</h3>
-<p class="text-2xl font-bold text-green-400">+420 pips</p>
-</div>
-
-<div class="bg-slate-900 p-6 rounded-xl">
-<h3 class="text-slate-400 text-sm">Discipline</h3>
-<p class="text-2xl font-bold">85%</p>
-</div>
-
-</div>
-
-{% endblock %}
+<ul>
+<li><a href="/journal">Trade Journal</a></li>
+<li><a href="/analysis">Chart Analysis</a></li>
+<li><a href="/mentor">AI Mentor</a></li>
+<li><a href="/blog">Blog</a></li>
+</ul>
