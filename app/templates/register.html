@@ -1,215 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - Trading Academy Pro</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 0;
-        }
-        
-        .register-container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            overflow: hidden;
-            width: 100%;
-            max-width: 1000px;
-        }
-        
-        .register-image {
-            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-            min-height: 600px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            padding: 40px;
-        }
-        
-        .register-form {
-            padding: 50px;
-        }
-        
-        .form-control {
-            border-radius: 10px;
-            padding: 12px 15px;
-            border: 2px solid #e5e7eb;
-        }
-        
-        .form-control:focus {
-            border-color: #10b981;
-            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
-        }
-        
-        .btn-register {
-            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-            border: none;
-            border-radius: 10px;
-            padding: 12px;
-            font-weight: 600;
-            width: 100%;
-            color: white;
-        }
-        
-        .btn-register:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
-        }
-        
-        .progress-steps {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 30px;
-            position: relative;
-        }
-        
-        .step {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: #e5e7eb;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            color: #6b7280;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .step.active {
-            background: #10b981;
-            color: white;
-        }
-        
-        .step.completed {
-            background: #059669;
-            color: white;
-        }
-        
-        .progress-line {
-            position: absolute;
-            top: 20px;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: #e5e7eb;
-            z-index: 0;
-        }
-    </style>
+<title>Register</title>
 </head>
-<body>
-    <div class="container">
-        <div class="register-container">
-            <div class="row g-0">
-                <div class="col-lg-5">
-                    <div class="register-image">
-                        <div class="text-center">
-                            <i class="fas fa-rocket fa-4x mb-4"></i>
-                            <h2>Start Your Trading Journey</h2>
-                            <p class="mt-3">Join 10,000+ traders who have transformed their trading with our AI-powered platform.</p>
-                            <ul class="list-unstyled mt-4 text-start">
-                                <li class="mb-2"><i class="fas fa-check-circle me-2"></i> Free AI trade analysis</li>
-                                <li class="mb-2"><i class="fas fa-check-circle me-2"></i> Expert-led courses</li>
-                                <li class="mb-2"><i class="fas fa-check-circle me-2"></i> Live webinar access</li>
-                                <li class="mb-2"><i class="fas fa-check-circle me-2"></i> Trading community</li>
-                            </ul>
-                            <div class="mt-4">
-                                <small>Already have an account?</small><br>
-                                <a href="{{ url_for('auth.login') }}" class="btn btn-outline-light mt-2">Sign In</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-7">
-                    <div class="register-form">
-                        <h3 class="mb-2">Create Account</h3>
-                        <p class="text-muted mb-4">Fill in your details to get started</p>
-                        
-                        {% with messages = get_flashed_messages(with_categories=true) %}
-                            {% if messages %}
-                                {% for category, message in messages %}
-                                    <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show">
-                                        {{ message }}
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                                    </div>
-                                {% endfor %}
-                            {% endif %}
-                        {% endwith %}
-                        
-                        <form method="POST" action="{{ url_for('auth.register') }}">
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">First Name</label>
-                                    <input type="text" name="first_name" class="form-control" placeholder="John" required>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Last Name</label>
-                                    <input type="text" name="last_name" class="form-control" placeholder="Doe" required>
-                                </div>
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label class="form-label">Username</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-light"><i class="fas fa-user text-muted"></i></span>
-                                    <input type="text" name="username" class="form-control" placeholder="Choose a username" required>
-                                </div>
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label class="form-label">Email Address</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-light"><i class="fas fa-envelope text-muted"></i></span>
-                                    <input type="email" name="email" class="form-control" placeholder="john@example.com" required>
-                                </div>
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label class="form-label">Password</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-light"><i class="fas fa-lock text-muted"></i></span>
-                                    <input type="password" name="password" class="form-control" placeholder="Min 8 characters" required minlength="8">
-                                </div>
-                                <div class="form-text">Must be at least 8 characters long</div>
-                            </div>
-                            
-                            <div class="mb-4">
-                                <label class="form-label">Confirm Password</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-light"><i class="fas fa-lock text-muted"></i></span>
-                                    <input type="password" name="confirm_password" class="form-control" placeholder="Confirm your password" required>
-                                </div>
-                            </div>
-                            
-                            <div class="mb-4">
-                                <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="terms" required>
-                                    <label class="form-check-label" for="terms">
-                                        I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
-                                    </label>
-                                </div>
-                            </div>
-                            
-                            <button type="submit" class="btn btn-register">
-                                <i class="fas fa-user-plus me-2"></i>Create Account
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<body>
+
+<h2>Create Account</h2>
+
+<form method="POST">
+
+<input type="email" name="email" placeholder="Email" required>
+
+<br><br>
+
+<input type="password" name="password" placeholder="Password" required>
+
+<br><br>
+
+<button type="submit">Register</button>
+
+</form>
+
+<a href="/login">Login</a>
+
 </body>
 </html>
